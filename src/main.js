@@ -1,11 +1,11 @@
-import {createMenuTemplate} from './view/menu.js'
-import {createSortTemplate} from './view/sort.js'
-import {createInfoTemplate} from './view/info.js'
-import {createFiltersTemplate} from './view/filters.js'
-import {createPointTemplate} from './view/point.js'
-import {createAddPointTemplate} from './view/add-point.js'
-import {createEditPointTemplate} from './view/edit-point.js'
-import {createEventsListTemplate} from './view/events-list.js'
+import {createMenuTemplate} from './view/menu.js';
+import {createSortTemplate} from './view/sort.js';
+import {createInfoTemplate} from './view/info.js';
+import {createFiltersTemplate} from './view/filters.js';
+import {createPointTemplate} from './view/point.js';
+// import {createAddPointTemplate} from './view/add-point.js';
+import {createEditPointTemplate} from './view/edit-point.js';
+import {createEventsListTemplate} from './view/events-list.js';
 
 const POINT_COUNT = 3;
 
