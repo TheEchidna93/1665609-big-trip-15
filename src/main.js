@@ -6,8 +6,19 @@ import {createPointTemplate} from './view/point.js';
 // import {createAddPointTemplate} from './view/add-point.js';
 import {createEditPointTemplate} from './view/edit-point.js';
 import {createEventsListTemplate} from './view/events-list.js';
+import {getPoint} from './mock/point.js';
 
-const POINT_COUNT = 3;
+const POINT_COUNT = 20;
+let interval = 0;
+let hoursPassed = 0;
+
+const points = [];
+
+for (let i = 0; i < POINT_COUNT; i++) {
+  interval = Math.floor(Math.random * 2 + 1);
+  hoursPassed += interval;
+  points.push(getPoint(hoursPassed, interval));
+}
 
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
@@ -29,6 +40,6 @@ const siteTripEventsListElement = document.querySelector('.trip-events__list');
 render(siteTripEventsListElement, createEditPointTemplate(), 'beforeend');
 
 for (let i = 0; i < POINT_COUNT; i++) {
-  render(siteTripEventsListElement, createPointTemplate(), 'beforeend');
+  render(siteTripEventsListElement, createPointTemplate(points[i]), 'beforeend');
 }
 

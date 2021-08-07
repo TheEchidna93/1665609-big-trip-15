@@ -42,7 +42,7 @@ const getRandomInteger = (a = 0, b = 1) => {
 };
 
 const getType = () => {
-  let index = getRandomInteger(0, types.length);
+  let index = getRandomInteger(0, types.length-1);
   return types[index];
 };
 
@@ -67,15 +67,15 @@ const getDescription = (count) => {
 }
 
 const getOffers = (type) => {
-  let offers = [];
+  let tempOffers = [];
   let maxOffers = getRandomInteger(0, offers[type].length);
   maxOffers = Math.min(maxOffers, 5);
 
   for (let i = 0; i < maxOffers; i++) {
-    offers.push(offers[type][i]);
+    tempOffers.push(offers[type][i]);
   }
 
-  return offers;
+  return tempOffers;
 }
 
 const getDate = (hoursPassed = 0, interval = 0) => {
