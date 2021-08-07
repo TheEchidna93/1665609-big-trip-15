@@ -21,7 +21,7 @@ const getOffers = (offers) => {
   for (let i = 0; i < offers.length; i++) {
     let template = `
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${i}}" type="checkbox" name="event-offer-${i}" checked>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${i}}" type="checkbox" name="event-offer-${i}">
       <label class="event__offer-label" for="event-offer-luggage-1">
         <span class="event__offer-title">${offers[i].title}</span>
         &plus;&euro;&nbsp;
@@ -44,7 +44,6 @@ const getPictures = (pictures) => {
 };
 
 export const createAddPointTemplate = (point) => {
-  console.log(point)
   return `
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
