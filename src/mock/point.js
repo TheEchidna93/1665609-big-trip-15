@@ -68,7 +68,7 @@ const getDescription = (count) => {
 
 const getOffers = (type) => {
   let tempOffers = [];
-  let maxOffers = getRandomInteger(0, offers[type].length);
+  let maxOffers = getRandomInteger(1, offers[type].length);
   maxOffers = Math.min(maxOffers, 5);
 
   for (let i = 0; i < maxOffers; i++) {
@@ -88,12 +88,12 @@ const getPhoto = () => {
 }
 
 // interval, hoursPassed - чтобы даты шли последовательно, id - для id
-export const getPoint = (interval, hoursPassed, id) => {
+export const getPoint = (hoursPassed, interval, id) => {
   let type = getType();
   return {
-    "base_price": getRandomInteger(1, 15) * 100,
-    "date_from": getDate(hoursPassed),
-    "date_to": getDate(hoursPassed, interval),
+    base_price: getRandomInteger(1, 15) * 100,
+    date_from: getDate(hoursPassed),
+    date_to: getDate(hoursPassed, interval),
     destination: {
       description: getDescription(5),
       name: getName(),
