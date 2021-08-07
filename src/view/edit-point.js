@@ -17,6 +17,9 @@ const formatDate = (date) => {
 };
 
 const getOffers = (offers) => {
+  if (!offers.length) {
+    return '';
+  }
   let templateOffers = '';
   for (let i = 0; i < offers.length; i++) {
     let template = `
@@ -34,7 +37,8 @@ const getOffers = (offers) => {
   return templateOffers;
 };
 
-export const createEditPointTemplate = (point) => `
+export const createEditPointTemplate = (point) => {
+  return `
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -146,7 +150,7 @@ export const createEditPointTemplate = (point) => `
             <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
             <div class="event__available-offers">
-              ${getOffers(point.offers)}
+              ${point.offers.length ? getOffers(point.offers) : ''}
             </div>
           </section>
 
@@ -157,4 +161,4 @@ export const createEditPointTemplate = (point) => `
         </section>
       </form>
     <li>
-  `;
+  `};

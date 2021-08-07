@@ -3,7 +3,7 @@ import {createSortTemplate} from './view/sort.js';
 import {createInfoTemplate} from './view/info.js';
 import {createFiltersTemplate} from './view/filters.js';
 import {createPointTemplate} from './view/point.js';
-import {createAddPointTemplate} from './view/add-point.js';
+// import {createAddPointTemplate} from './view/add-point.js';
 import {createEditPointTemplate} from './view/edit-point.js';
 import {createEventsListTemplate} from './view/events-list.js';
 import {getPoint} from './mock/point.js';
@@ -37,8 +37,7 @@ render(siteTripEventsElement, createEventsListTemplate(), 'beforeend');
 
 const siteTripEventsListElement = document.querySelector('.trip-events__list');
 
-render(siteTripEventsListElement, createAddPointTemplate(points[0]), 'beforeend');
-render(siteTripEventsListElement, createEditPointTemplate(points[1]), 'beforeend');
+render(siteTripEventsListElement, createEditPointTemplate(points[0]), 'beforeend');
 
 for (let i = 0; i < POINT_COUNT; i++) {
   render(siteTripEventsListElement, createPointTemplate(points[i]), 'beforeend');

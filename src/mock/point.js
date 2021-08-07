@@ -47,7 +47,7 @@ const getType = () => {
 };
 
 const getName = () => {
-  let index = getRandomInteger(0, names.length);
+  let index = getRandomInteger(0, names.length-1);
   return names[index];
 };
 
@@ -68,7 +68,7 @@ const getDescription = (count) => {
 
 const getOffers = (type) => {
   let tempOffers = [];
-  let maxOffers = getRandomInteger(1, offers[type].length);
+  let maxOffers = getRandomInteger(0, offers[type].length);
   maxOffers = Math.min(maxOffers, 5);
 
   for (let i = 0; i < maxOffers; i++) {
