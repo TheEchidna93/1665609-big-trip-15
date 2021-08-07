@@ -15,7 +15,7 @@ let hoursPassed = 0;
 const points = [];
 
 for (let i = 0; i < POINT_COUNT; i++) {
-  interval = Math.floor(Math.random() * 2 + 1);
+  interval = Math.floor(Math.random() * 6 + 2);
   points.push(getPoint(hoursPassed, interval, i));
   hoursPassed += interval;
 }
@@ -29,7 +29,7 @@ const siteTripControlsNavElement = document.querySelector('.trip-controls__navig
 const siteTripControlsFilterElement = document.querySelector('.trip-controls__filters');
 const siteTripEventsElement = document.querySelector('.trip-events');
 
-render(siteMainElement, createInfoTemplate(), 'afterbegin');
+render(siteMainElement, createInfoTemplate(points), 'afterbegin');
 render(siteTripControlsNavElement, createMenuTemplate(), 'beforeend');
 render(siteTripControlsFilterElement, createFiltersTemplate(), 'beforeend');
 render(siteTripEventsElement, createSortTemplate(), 'beforeend');
@@ -39,7 +39,7 @@ const siteTripEventsListElement = document.querySelector('.trip-events__list');
 
 render(siteTripEventsListElement, createEditPointTemplate(points[0]), 'beforeend');
 
-for (let i = 0; i < POINT_COUNT; i++) {
+for (let i = 1; i < POINT_COUNT; i++) {
   render(siteTripEventsListElement, createPointTemplate(points[i]), 'beforeend');
 }
 
