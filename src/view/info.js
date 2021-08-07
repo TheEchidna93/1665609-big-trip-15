@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 
 const getRoute = (points) => {
   let finalRoute = [];
-  points.forEach(point => {
+  points.forEach((point) => {
     if (finalRoute.indexOf(point.destination.name) === -1) {
       finalRoute.push(point.destination.name);
     }
@@ -13,17 +13,22 @@ const getRoute = (points) => {
 
 const formatDate = (date) => {
   const format = 'MMM DD';
-  let tempDate = date.format(format);
+  const tempDate = date.format(format);
   return tempDate;
-}
+};
+
+const prefixByZero = (string) => {
+  const newString = `0${string}`;
+  return newString;
+};
 
 const getDates = (points) => {
-  let dateStart = dayjs(points[0].date_from.substring(0, 16));
+  const dateStart = dayjs(points[0].date_from.substring(0, 16));
   let dateEnd = dayjs(points[0].date_to.substring(0, 16));
   let currentDate;
   let finalDates = '';
 
-  points.forEach(point => {
+  points.forEach((point) => {
     currentDate = dayjs(point.date_to.substring(0, 16));
     if ( currentDate.isAfter(dateEnd) ) {
       dateEnd = currentDate;
@@ -31,7 +36,7 @@ const getDates = (points) => {
   });
 
   if (dateStart.month() === dateEnd.month()) {
-    finalDates = `${formatDate(dateStart)}&nbsp;&mdash;&nbsp;${dateEnd.date() > 10 ? dateEnd.date() : '0' + dateEnd.date()}`;
+    finalDates = `${formatDate(dateStart)}&nbsp;&mdash;&nbsp;${dateEnd.date() > 10 ? dateEnd.date() : prefixByZero(dateEnd.date())}`;
   } else {
     finalDates = `${formatDate(dateStart)}&nbsp;&mdash;&nbsp;${formatDate(dateEnd)}`;
   }
@@ -41,11 +46,11 @@ const getDates = (points) => {
 
 const getCost = (points) => {
   let finalCost = 0;
-  points.forEach(point => {
+  points.forEach((point) => {
     finalCost += point.base_price;
   });
   return finalCost;
-}
+};
 
 export const createInfoTemplate = (points) => `
     <section class="trip-main__trip-info  trip-info">

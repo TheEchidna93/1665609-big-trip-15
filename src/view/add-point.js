@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 // Названия городов для селекта
-const names = ["Chamonix", "Ankara", "Geneva", "Ottawa", "Chelyabinsk", "Montreal", "Sydney", "Sarajevo"];
+const names = ['Chamonix', 'Ankara', 'Geneva', 'Ottawa', 'Chelyabinsk', 'Montreal', 'Sydney', 'Sarajevo'];
 
 const capitalize = (sentence) => {
   let tempSentence = sentence;
@@ -12,14 +12,14 @@ const capitalize = (sentence) => {
 };
 
 const formatDate = (date) => {
-  const format = "YY/MM/DD HH:mm";
+  const format = 'YY/MM/DD HH:mm';
   return dayjs(date.substring(0,16)).format(format);
 };
 
 const getOffers = (offers) => {
   let templateOffers = '';
   for (let i = 0; i < offers.length; i++) {
-    let template = `
+    const template = `
     <div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-${i}}" type="checkbox" name="event-offer-${i}">
       <label class="event__offer-label" for="event-offer-luggage-1">
@@ -37,14 +37,13 @@ const getOffers = (offers) => {
 const getPictures = (pictures) => {
   let tempPictures = '';
   for (let i = 0; i < pictures.length; i++) {
-    let template = `<img class="event__photo" src="${pictures[i].src}" alt="Event photo">`
+    const template = `<img class="event__photo" src="${pictures[i].src}" alt="Event photo">`;
     tempPictures += template;
   }
   return tempPictures;
 };
 
-export const createAddPointTemplate = (point) => {
-  return `
+export const createAddPointTemplate = (point) => `
     <li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -170,4 +169,4 @@ export const createAddPointTemplate = (point) => {
         </section>
       </form>
     </li>
-  `};
+  `;

@@ -14,13 +14,13 @@ const formatDate = (date, formatType) => {
   }
   // Форматы соответствуют formatType по названию
   const formats = {
-    datetime:"YYYY-MM-DDTHH:mm",
-    time:"HH:mm",
-    shortMonth:"MMM DD",
+    datetime:'YYYY-MM-DDTHH:mm',
+    time:'HH:mm',
+    shortMonth:'MMM DD',
   };
 
   let tempDate = dayjs(date.substring(0,16)).format(formats[formatType]);
-  if (formatType === "shortMonth") {
+  if (formatType === 'shortMonth') {
     tempDate = tempDate.split('');
     tempDate[0] = tempDate[0].toUpperCase();
     tempDate[1] = tempDate[1].toUpperCase();
@@ -31,18 +31,23 @@ const formatDate = (date, formatType) => {
   return tempDate;
 };
 
+const prefixByZero = (string) => {
+  const newString = `0${string}`;
+  return newString;
+};
+
 const getDuration = (dateStart, dateEnd) => {
-  let tempStart = dateStart.substring(0,16);
-  let tempEnd = dateEnd.substring(0,16);
-  let hours = dayjs(tempEnd).subtract(dayjs(tempStart).hour(), 'hour').hour();
-  let minutes = dayjs(tempEnd).subtract(dayjs(tempStart).minute(), 'minute').minute();
-  return `${hours > 10 ? hours : '0' + hours}H ${minutes > 10 ? minutes : '0' + minutes}M`;
-}
+  const tempStart = dateStart.substring(0,16);
+  const tempEnd = dateEnd.substring(0,16);
+  const hours = dayjs(tempEnd).subtract(dayjs(tempStart).hour(), 'hour').hour();
+  const minutes = dayjs(tempEnd).subtract(dayjs(tempStart).minute(), 'minute').minute();
+  return `${hours > 10 ? hours : prefixByZero(hours)}H ${minutes > 10 ? minutes : prefixByZero(minutes)}M`;
+};
 
 const getOffers = (offers) => {
   let tempOffers = '';
   for (let i = 0; i < offers.length; i++) {
-    let template = `
+    const template = `
     <li class="event__offer">
       <span class="event__offer-title">${offers[i].title}</span>
       &plus;&euro;&nbsp;
@@ -53,8 +58,7 @@ const getOffers = (offers) => {
   return tempOffers;
 };
 
-export const createPointTemplate = (point) => {
-  return `
+export const createPointTemplate = (point) => `
     <li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="2019-03-18">${formatDate(point.date_from, 'shortMonth')}</time>
@@ -88,4 +92,4 @@ export const createPointTemplate = (point) => {
         </button>
       </div>
     </li>
-  `};
+  `;
