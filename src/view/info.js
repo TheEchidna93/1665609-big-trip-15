@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {createElement} from "../utils.js";
 
 const getRoute = (points) => {
   let finalRoute = [];
@@ -52,8 +53,14 @@ const getCost = (points) => {
   return finalCost;
 };
 
-export const createInfoTemplate = (points) => `
-    <section class="trip-main__trip-info  trip-info">
+export default class Info { 
+  constructor(points) {
+    this._points = points;
+    this._element = null;
+  }
+
+  createInfoTemplate(points) {
+    return `<section class="trip-main__trip-info  trip-info">
       <div class="trip-info__main">
         <h1 class="trip-info__title">${getRoute(points)}</h1>
 
@@ -64,4 +71,21 @@ export const createInfoTemplate = (points) => `
         Total: &euro;&nbsp;<span class="trip-info__cost-value">${getCost(points)}</span>
       </p>
     </section>
-  `;
+  `}
+
+  getTemplate() {
+    return this.createInfoTemplate(this._points);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

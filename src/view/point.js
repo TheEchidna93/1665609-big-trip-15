@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {createElement} from "../utils.js";
 
 const capitalize = (sentence) => {
   let tempSentence = sentence;
@@ -58,8 +59,14 @@ const getOffers = (offers) => {
   return tempOffers;
 };
 
-export const createPointTemplate = (point) => `
-    <li class="trip-events__item">
+export default class Point {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  createPointTemplate(point) {
+    return `<li class="trip-events__item">
       <div class="event">
         <time class="event__date" datetime="2019-03-18">${formatDate(point.date_from, 'shortMonth')}</time>
         <div class="event__type">
@@ -91,5 +98,22 @@ export const createPointTemplate = (point) => `
           <span class="visually-hidden">Open event</span>
         </button>
       </div>
-    </li>
-  `;
+    </li>`
+  }
+
+  getTemplate() {
+    return this.createPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
