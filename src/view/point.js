@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from "../utils.js";
+import {createElement} from '../utils.js';
 
 const capitalize = (sentence) => {
   let tempSentence = sentence;
@@ -98,7 +98,7 @@ export default class Point {
           <span class="visually-hidden">Open event</span>
         </button>
       </div>
-    </li>`
+    </li>`;
   }
 
   getTemplate() {

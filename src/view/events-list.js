@@ -1,11 +1,11 @@
-import {createElement} from "../utils.js";
+import {createElement} from '../utils.js';
 
 export default class EventsList {
   constructor() {
     this._element = null;
   }
 
-  createEventsListTemplate() { return '<ul class="trip-events__list"></ul>'}
+  createEventsListTemplate() { return '<ul class="trip-events__list"></ul>';}
 
   getTemplate() {
     return this.createEventsListTemplate();

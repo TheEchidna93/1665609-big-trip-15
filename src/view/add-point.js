@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from "../utils.js";
+import {createElement} from '../utils.js';
 
 // Названия городов для селекта
 const names = ['Chamonix', 'Ankara', 'Geneva', 'Ottawa', 'Chelyabinsk', 'Montreal', 'Sydney', 'Sarajevo'];
@@ -175,7 +175,7 @@ export default class AddPoint {
           </section>
         </section>
       </form>
-    </li>`
+    </li>`;
   }
 
   getTemplate() {

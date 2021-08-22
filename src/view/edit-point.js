@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from "../utils.js";
+import {createElement} from '../utils.js';
 
 // Названия городов для селекта
 const names = ['Chamonix', 'Ankara', 'Geneva', 'Ottawa', 'Chelyabinsk', 'Montreal', 'Sydney', 'Sarajevo'];
@@ -44,7 +44,7 @@ export default class EditPoint {
     this._element = null;
   }
 
-  createEditPointTemplate(point) { 
+  createEditPointTemplate(point) {
     return `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
@@ -166,7 +166,7 @@ export default class EditPoint {
           </section>
         </section>
       </form>
-    <li>`
+    <li>`;
   }
 
   getTemplate() {

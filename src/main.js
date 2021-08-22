@@ -26,30 +26,6 @@ const siteTripControlsNavElement = document.querySelector('.trip-controls__navig
 const siteTripControlsFilterElement = document.querySelector('.trip-controls__filters');
 const siteTripEventsElement = document.querySelector('.trip-events');
 
-const renderPoint = (siteTripEventsListElement, point) => {
-  const pointComponent = new PointView(point);
-  const editPointComponent = new EditPointView(point);
-
-  const replacePointToForm = () => {
-    siteTripEventsListElement.replaceChild(editPointComponent.getElement(), pointComponent.getElement());
-  };
-  
-  const replaceFormToPoint = () => {
-    siteTripEventsListElement.replaceChild(pointComponent.getElement(), editPointComponent.getElement());
-  };
-  
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
-    replacePointToForm();
-  });
-  
-  editPointComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    replaceFormToPoint();
-  });
-
-  render(siteTripEventsListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
-};
-
 render(siteMainElement, new InfoView(points).getElement(), RenderPosition.AFTERBEGIN);
 render(siteTripControlsNavElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
 render(siteTripControlsFilterElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
@@ -58,7 +34,30 @@ render(siteTripEventsElement, new EventsListView().getElement(), RenderPosition.
 
 const siteTripEventsListElement = document.querySelector('.trip-events__list');
 
-points.forEach(point => {
-  // render(siteTripEventsListElement, new PointView(point).getElement(), RenderPosition.BEFOREEND);
-  renderPoint(siteTripEventsListElement, point);
+const renderPoint = (point) => {
+  const pointComponent = new PointView(point);
+  const editPointComponent = new EditPointView(point);
+
+  const replacePointToForm = () => {
+    siteTripEventsListElement.replaceChild(editPointComponent.getElement(), pointComponent.getElement());
+  };
+
+  const replaceFormToPoint = () => {
+    siteTripEventsListElement.replaceChild(pointComponent.getElement(), editPointComponent.getElement());
+  };
+
+  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replacePointToForm();
+  });
+
+  editPointComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToPoint();
+  });
+
+  render(siteTripEventsListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+};
+
+points.forEach((point) => {
+  renderPoint(point);
 });
