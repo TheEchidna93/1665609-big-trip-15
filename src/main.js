@@ -5,6 +5,7 @@ import FiltersView from './view/filters.js';
 import PointView from './view/point.js';
 // import AddPointView from './view/add-point.js';
 import EditPointView from './view/edit-point.js';
+import NoPointView from './view/no-point.js';
 import EventsListView from './view/events-list.js';
 import {getPoint} from './mock/point.js';
 import {render, RenderPosition} from './utils.js';
@@ -46,18 +47,32 @@ const renderPoint = (point) => {
     siteTripEventsListElement.replaceChild(pointComponent.getElement(), editPointComponent.getElement());
   };
 
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToPoint();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
   pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
     replacePointToForm();
+    document.addEventListener('keydown', onEscKeyDown);
   });
 
   editPointComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
     evt.preventDefault();
     replaceFormToPoint();
+    document.removeEventListener('keydown', onEscKeyDown);
   });
 
   render(siteTripEventsListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-points.forEach((point) => {
-  renderPoint(point);
-});
+if (!points.length) {
+  render(siteTripEventsListElement, new NoPointView().getElement(), RenderPosition.BEFOREEND);
+} else {
+  points.forEach((point) => {
+    renderPoint(point);
+  });
+}
