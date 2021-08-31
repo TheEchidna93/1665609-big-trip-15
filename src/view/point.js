@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 const capitalize = (sentence) => {
   let tempSentence = sentence;
@@ -59,10 +59,10 @@ const getOffers = (offers) => {
   return tempOffers;
 };
 
-export default class Point {
+export default class Point extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   createPointTemplate(point) {
@@ -103,17 +103,5 @@ export default class Point {
 
   getTemplate() {
     return this.createPointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
