@@ -6,3 +6,16 @@ export const getRandomInteger = (a = 0, b = 1) => {
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
+
+export const capitalize = (sentence) => {
+  let tempSentence = sentence;
+  tempSentence = tempSentence.split('');
+  tempSentence[0] = tempSentence[0].toUpperCase();
+  tempSentence = tempSentence.join('');
+  return tempSentence;
+};
+
+export const prefixByZero = (string) => {
+  const newString = `0${string}`;
+  return newString;
+};

@@ -1,16 +1,9 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract.js';
+import {capitalize} from '../utils/common.js';
 
 // Названия городов для селекта
 const names = ['Chamonix', 'Ankara', 'Geneva', 'Ottawa', 'Chelyabinsk', 'Montreal', 'Sydney', 'Sarajevo'];
-
-const capitalize = (sentence) => {
-  let tempSentence = sentence;
-  tempSentence = tempSentence.split('');
-  tempSentence[0] = tempSentence[0].toUpperCase();
-  tempSentence = tempSentence.join('');
-  return tempSentence;
-};
 
 const formatDate = (date) => {
   const format = 'YY/MM/DD HH:mm';
@@ -42,6 +35,8 @@ export default class EditPoint extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   createEditPointTemplate(point) {
@@ -171,5 +166,15 @@ export default class EditPoint extends AbstractView {
 
   getTemplate() {
     return this.createEditPointTemplate(this._point);
+  }
+  
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 }

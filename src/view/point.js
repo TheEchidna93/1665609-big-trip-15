@@ -1,13 +1,6 @@
 import dayjs from 'dayjs';
 import AbstractView from './abstract.js';
-
-const capitalize = (sentence) => {
-  let tempSentence = sentence;
-  tempSentence = tempSentence.split('');
-  tempSentence[0] = tempSentence[0].toUpperCase();
-  tempSentence = tempSentence.join('');
-  return tempSentence;
-};
+import {capitalize, prefixByZero} from '../utils/common.js';
 
 const formatDate = (date, formatType) => {
   if (!formatType) {
@@ -30,11 +23,6 @@ const formatDate = (date, formatType) => {
   }
 
   return tempDate;
-};
-
-const prefixByZero = (string) => {
-  const newString = `0${string}`;
-  return newString;
 };
 
 const getDuration = (dateStart, dateEnd) => {
@@ -63,6 +51,8 @@ export default class Point extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
+
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   createPointTemplate(point) {
@@ -103,5 +93,15 @@ export default class Point extends AbstractView {
 
   getTemplate() {
     return this.createPointTemplate(this._point);
+  }
+
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
+  }
+
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }
