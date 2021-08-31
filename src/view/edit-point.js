@@ -167,7 +167,7 @@ export default class EditPoint extends AbstractView {
   getTemplate() {
     return this.createEditPointTemplate(this._point);
   }
-  
+
   _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.formSubmit();

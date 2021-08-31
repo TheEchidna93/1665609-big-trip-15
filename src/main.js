@@ -8,7 +8,7 @@ import EditPointView from './view/edit-point.js';
 import NoPointView from './view/no-point.js';
 import EventsListView from './view/events-list.js';
 import {getPoint} from './mock/point.js';
-import {render, RenderPosition, replace, remove} from './utils/render.js';
+import {render, RenderPosition, replace} from './utils/render.js';
 
 const POINT_COUNT = 20;
 let interval = 0;
