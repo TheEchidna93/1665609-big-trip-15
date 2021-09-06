@@ -3,13 +3,20 @@ import EditPointView from '../view/edit-point.js';
 // import AddPointView from '../view/add-point.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDIT: 'EDIT',
+};
+
 export default class Point {
-  constructor(pointListContainer, changeData) {
+  constructor(pointListContainer, changeData, changeMode) {
     this._pointListContainer = pointListContainer;
     this._changeData = changeData;
+    this._changeMode = changeMode;
 
     this._pointComponent = null;
-    this.editPointComponent = null;
+    this._editPointComponent = null;
+    this._mode = Mode.DEFAULT;
 
     this._handleEditClick = this._handleEditClick.bind(this);
     this._handleFavClick =  this._handleFavClick.bind(this);
@@ -35,11 +42,11 @@ export default class Point {
       return;
     }
 
-    if (this._pointListContainer.getElement().contains(prevPointComponent.getElement())) {
+    if (this._mode === Mode.DEFAULT) {
       replace(this._pointComponent, prevPointComponent);
     }
 
-    if (this._pointListContainer.getElement().contains(prevEditPointComponent.getElement())) {
+    if (this._mode === Mode.EDIT) {
       replace(this._editPointComponent, prevEditPointComponent);
     }
 
@@ -52,14 +59,23 @@ export default class Point {
     remove(this._editPointComponent);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceFormToPoint();
+    }
+  }
+
   _replacePointToForm() {
     replace(this._editPointComponent, this._pointComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
+    this._changeMode();
+    this._mode = Mode.EDIT;
   }
 
   _replaceFormToPoint() {
     replace(this._pointComponent, this._editPointComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
+    this._mode = Mode.DEFAULT;
   }
 
   _escKeyDownHandler(evt) {
@@ -79,7 +95,7 @@ export default class Point {
         {},
         this._point,
         {
-          is_favorite: !this._point.is_favorite,
+          'is_favorite': !this._point.is_favorite,
         },
       ),
     );

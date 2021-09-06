@@ -79,7 +79,7 @@ const getDate = (hoursPassed = 0, interval = 0) => {
 const getPhoto = () => `http://picsum.photos/248/152?r=${getRandomInteger(1, 25)}`;
 
 // interval, hoursPassed - чтобы даты шли последовательно, id - для id
-export const getPoint = (hoursPassed, interval, id) => {
+export const getPoint = (hoursPassed, interval) => {
   const type = getType();
   return {
     'base_price': getRandomInteger(1, 15) * 100,
