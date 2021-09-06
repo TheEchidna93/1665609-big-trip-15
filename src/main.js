@@ -9,7 +9,7 @@ const points = [];
 
 for (let i = 0; i < POINT_COUNT; i++) {
   interval = Math.floor(Math.random() * 6 + 2);
-  points.push(getPoint(hoursPassed, interval, i));
+  points.push(getPoint(hoursPassed, interval));
   hoursPassed += interval;
 }
 

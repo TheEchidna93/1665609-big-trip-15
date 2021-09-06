@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {nanoid} from 'nanoid';
 import {getRandomInteger} from '../utils/common.js';
 
 // Данные
@@ -94,7 +95,7 @@ export const getPoint = (hoursPassed, interval, id) => {
         },
       ],
     },
-    id: id,
+    id: nanoid(),
     'is_favorite': Boolean(getRandomInteger(0, 1)),
     offers: getOffers(type),
     type: type,

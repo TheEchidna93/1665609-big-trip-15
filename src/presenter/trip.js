@@ -5,6 +5,7 @@ import FiltersView from '../view/filters.js';
 import NoPointView from '../view/no-point.js';
 import EventsListView from '../view/events-list.js';
 import PointPresenter from './point.js';
+import {updateItem} from '../utils/common.js';
 import {render, RenderPosition} from '../utils/render.js';
 
 export default class Trip {
@@ -14,6 +15,7 @@ export default class Trip {
     this._navContainer = navContainer;
     this._filterContainer = filterContainer;
     this._eventsContainer = eventsContainer;
+    this._pointPresenter = new Map();
 
     this._menuComponent = new MenuView();
     this._sortComponent = new SortView();
@@ -21,6 +23,8 @@ export default class Trip {
     this._filtersComponent = new FiltersView();
     this._eventListComponent = new EventsListView();
     this._noPointComponent = new NoPointView();
+
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init() {
@@ -31,6 +35,11 @@ export default class Trip {
     this._renderEventList();
 
     this._renderPoints(this._points);
+  }
+
+  _handlePointChange(updatedPoint) {
+    this._points = updateItem(this._points, updatedPoint);
+    this._pointPresenter.get(updatedPoint.id).init(updatedPoint);
   }
 
   _renderMenu() {
@@ -54,8 +63,9 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._eventListComponent);
+    const pointPresenter = new PointPresenter(this._eventListComponent, this._handlePointChange);
     pointPresenter.init(point);
+    this._pointPresenter.set(point.id, pointPresenter);
   }
 
   _renderPoints(points) {
@@ -66,6 +76,11 @@ export default class Trip {
       this._renderPoint(point);
     });
     }
+  }
+
+  _clearEventList() {
+    this._pointPresenter.forEach((presenter) => presenter.destroy());
+    this._pointPresenter.clear();
   }
 
   _renderNoPoints() {
