@@ -95,7 +95,7 @@ export const getPoint = (hoursPassed, interval, id) => {
       ],
     },
     id: id,
-    'is_favorite': Boolean(getRandomInteger),
+    'is_favorite': Boolean(getRandomInteger(0, 1)),
     offers: getOffers(type),
     type: type,
   };
