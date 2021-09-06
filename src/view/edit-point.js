@@ -1,16 +1,9 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
+import {capitalize} from '../utils/common.js';
 
 // Названия городов для селекта
 const names = ['Chamonix', 'Ankara', 'Geneva', 'Ottawa', 'Chelyabinsk', 'Montreal', 'Sydney', 'Sarajevo'];
-
-const capitalize = (sentence) => {
-  let tempSentence = sentence;
-  tempSentence = tempSentence.split('');
-  tempSentence[0] = tempSentence[0].toUpperCase();
-  tempSentence = tempSentence.join('');
-  return tempSentence;
-};
 
 const formatDate = (date) => {
   const format = 'YY/MM/DD HH:mm';
@@ -38,10 +31,12 @@ const getOffers = (offers) => {
   return templateOffers;
 };
 
-export default class EditPoint {
+export default class EditPoint extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   createEditPointTemplate(point) {
@@ -173,15 +168,13 @@ export default class EditPoint {
     return this.createEditPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
   }
 
-  removeElement() {
-    this._element = null;
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
   }
 }

@@ -1,13 +1,6 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
-
-const capitalize = (sentence) => {
-  let tempSentence = sentence;
-  tempSentence = tempSentence.split('');
-  tempSentence[0] = tempSentence[0].toUpperCase();
-  tempSentence = tempSentence.join('');
-  return tempSentence;
-};
+import AbstractView from './abstract.js';
+import {capitalize, prefixByZero} from '../utils/common.js';
 
 const formatDate = (date, formatType) => {
   if (!formatType) {
@@ -32,11 +25,6 @@ const formatDate = (date, formatType) => {
   return tempDate;
 };
 
-const prefixByZero = (string) => {
-  const newString = `0${string}`;
-  return newString;
-};
-
 const getDuration = (dateStart, dateEnd) => {
   const tempStart = dateStart.substring(0,16);
   const tempEnd = dateEnd.substring(0,16);
@@ -59,10 +47,12 @@ const getOffers = (offers) => {
   return tempOffers;
 };
 
-export default class Point {
+export default class Point extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
+
+    this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   createPointTemplate(point) {
@@ -105,15 +95,13 @@ export default class Point {
     return this.createPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _editClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.editClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.editClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._editClickHandler);
   }
 }

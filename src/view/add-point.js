@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 // Названия городов для селекта
 const names = ['Chamonix', 'Ankara', 'Geneva', 'Ottawa', 'Chelyabinsk', 'Montreal', 'Sydney', 'Sarajevo'];
@@ -44,10 +44,10 @@ const getPictures = (pictures) => {
   return tempPictures;
 };
 
-export default class AddPoint {
+export default class AddPoint extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   createAddPointTemplate(point) {
@@ -180,17 +180,5 @@ export default class AddPoint {
 
   getTemplate() {
     return this.createAddPointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

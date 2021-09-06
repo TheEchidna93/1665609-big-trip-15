@@ -8,7 +8,7 @@ import EditPointView from './view/edit-point.js';
 import NoPointView from './view/no-point.js';
 import EventsListView from './view/events-list.js';
 import {getPoint} from './mock/point.js';
-import {render, RenderPosition} from './utils.js';
+import {render, RenderPosition, replace} from './utils/render.js';
 
 const POINT_COUNT = 20;
 let interval = 0;
@@ -27,11 +27,11 @@ const siteTripControlsNavElement = document.querySelector('.trip-controls__navig
 const siteTripControlsFilterElement = document.querySelector('.trip-controls__filters');
 const siteTripEventsElement = document.querySelector('.trip-events');
 
-render(siteMainElement, new InfoView(points).getElement(), RenderPosition.AFTERBEGIN);
-render(siteTripControlsNavElement, new MenuView().getElement(), RenderPosition.BEFOREEND);
-render(siteTripControlsFilterElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
-render(siteTripEventsElement, new SortView().getElement(), RenderPosition.BEFOREEND);
-render(siteTripEventsElement, new EventsListView().getElement(), RenderPosition.BEFOREEND);
+render(siteMainElement, new InfoView(points), RenderPosition.AFTERBEGIN);
+render(siteTripControlsNavElement, new MenuView(), RenderPosition.BEFOREEND);
+render(siteTripControlsFilterElement, new FiltersView(), RenderPosition.BEFOREEND);
+render(siteTripEventsElement, new SortView(), RenderPosition.BEFOREEND);
+render(siteTripEventsElement, new EventsListView(), RenderPosition.BEFOREEND);
 
 const siteTripEventsListElement = document.querySelector('.trip-events__list');
 
@@ -40,11 +40,11 @@ const renderPoint = (point) => {
   const editPointComponent = new EditPointView(point);
 
   const replacePointToForm = () => {
-    siteTripEventsListElement.replaceChild(editPointComponent.getElement(), pointComponent.getElement());
+    replace(editPointComponent, pointComponent);
   };
 
   const replaceFormToPoint = () => {
-    siteTripEventsListElement.replaceChild(pointComponent.getElement(), editPointComponent.getElement());
+    replace(pointComponent, editPointComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -55,22 +55,21 @@ const renderPoint = (point) => {
     }
   };
 
-  pointComponent.getElement().querySelector('.event__rollup-btn').addEventListener('click', () => {
+  pointComponent.setEditClickHandler(() => {
     replacePointToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
-  editPointComponent.getElement().querySelector('form').addEventListener('submit', (evt) => {
-    evt.preventDefault();
+  editPointComponent.setFormSubmitHandler(() => {
     replaceFormToPoint();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(siteTripEventsListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+  render(siteTripEventsListElement, pointComponent, RenderPosition.BEFOREEND);
 };
 
 if (!points.length) {
-  render(siteTripEventsListElement, new NoPointView().getElement(), RenderPosition.BEFOREEND);
+  render(siteTripEventsListElement, new NoPointView(), RenderPosition.BEFOREEND);
 } else {
   points.forEach((point) => {
     renderPoint(point);

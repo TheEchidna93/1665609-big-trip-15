@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {createElement} from '../utils.js';
+import AbstractView from './abstract.js';
 
 const getRoute = (points) => {
   let finalRoute = [];
@@ -53,10 +53,10 @@ const getCost = (points) => {
   return finalCost;
 };
 
-export default class Info {
+export default class Info extends AbstractView {
   constructor(points) {
+    super();
     this._points = points;
-    this._element = null;
   }
 
   createInfoTemplate(points) {
@@ -76,17 +76,5 @@ export default class Info {
 
   getTemplate() {
     return this.createInfoTemplate(this._points);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
