@@ -7,6 +7,8 @@ import EventsListView from '../view/events-list.js';
 import PointPresenter from './point.js';
 import {updateItem} from '../utils/common.js';
 import {render, RenderPosition} from '../utils/render.js';
+import {sortPointDown} from '../utils/sort.js';
+import {SortType} from '../const.js';
 
 export default class Trip {
   constructor(mainContainer, navContainer, filterContainer, eventsContainer, points) {
@@ -16,9 +18,10 @@ export default class Trip {
     this._filterContainer = filterContainer;
     this._eventsContainer = eventsContainer;
     this._pointPresenter = new Map();
+    this._currentSortType = SortType.DEFAULT;
 
     this._menuComponent = new MenuView();
-    this._sortComponent = new SortView();
+    this._sortComponent = new SortView(this._currentSortType);
     this._infoComponent = new InfoView(points);
     this._filtersComponent = new FiltersView();
     this._eventListComponent = new EventsListView();
@@ -26,16 +29,31 @@ export default class Trip {
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init() {
     this._renderMenu();
     this._renderFilters();
     this._renderInfo();
-    this._renderSort();
+    this._renderSort(this._currentSortType);
     this._renderEventList();
 
+    this._sourcePoints = this._points.slice();
+
     this._renderPoints(this._points);
+  }
+
+  _sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.TIME:
+        this._points.sort(sortPointDown);
+        break;
+      default:
+        this._points = this._sourcePoints.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 
   _handlePointChange(updatedPoint) {
@@ -45,6 +63,17 @@ export default class Trip {
 
   _handleModeChange() {
     this._pointPresenter.forEach((presenter) => presenter.resetView());
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortPoints(sortType);
+    this._clearEventList();
+    this._renderSort(sortType);
+    this._renderPoints(this._points);
   }
 
   _renderMenu() {
@@ -59,8 +88,10 @@ export default class Trip {
     render(this._mainContainer, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderSort() {
+  _renderSort(sortType) {
+    this._sortComponent = new SortView(sortType);
     render(this._eventsContainer, this._sortComponent, RenderPosition.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderEventList() {
