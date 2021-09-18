@@ -1,28 +1,53 @@
 import dayjs from 'dayjs';
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 import {capitalize} from '../utils/common.js';
 
 // Названия городов для селекта
 const names = ['Chamonix', 'Ankara', 'Geneva', 'Ottawa', 'Chelyabinsk', 'Montreal', 'Sydney', 'Sarajevo'];
+// Предложения для разных типов
+const offers = {
+  taxi: [
+    {title: 'Upgrade to a business class', price: 120},
+    {title: 'Choose the radio station', price: 60},
+  ],
+  bus: [
+    {title: 'Neck pillows', price: 30},
+  ],
+  train: [
+    {title: 'Snacks', price: 50},
+  ],
+  ship: [],
+  drive: [],
+  flight: [
+    {title: 'Business class', price: 200},
+  ],
+  'check-in':[],
+  sightseeing: [
+    {title: 'Tour guide', price: 120},
+  ],
+  restaurant: [
+    {title: 'WIP seat', price: 200},
+  ],
+};
 
 const formatDate = (date) => {
   const format = 'YY/MM/DD HH:mm';
   return dayjs(date.substring(0,16)).format(format);
 };
 
-const getOffers = (offers) => {
-  if (!offers.length) {
+const getOffers = (tempOffers, type) => {
+  if (!tempOffers.length) {
     return '';
   }
   let templateOffers = '';
-  for (let i = 0; i < offers.length; i++) {
+  for (let i = 0; i < tempOffers.length; i++) {
     const template = `
     <div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${i}}" type="checkbox" name="event-offer-${i}">
-      <label class="event__offer-label" for="event-offer-luggage-1">
-        <span class="event__offer-title">${offers[i].title}</span>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${i}" type="checkbox" name="event-offer-${i}">
+      <label class="event__offer-label" for="event-offer-${type}-${i}">
+        <span class="event__offer-title">${tempOffers[i].title}</span>
         &plus;&euro;&nbsp;
-        <span class="event__offer-price">${offers[i].price}</span>
+        <span class="event__offer-price">${tempOffers[i].price}</span>
       </label>
     </div>
     `;
@@ -31,22 +56,26 @@ const getOffers = (offers) => {
   return templateOffers;
 };
 
-export default class EditPoint extends AbstractView {
+export default class EditPoint extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = EditPoint.parsePointToData(point);
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._changeTypeHandler = this._changeTypeHandler.bind(this);
+    this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
-  createEditPointTemplate(point) {
+  createEditPointTemplate(data) {
     return `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
         <header class="event__header">
           <div class="event__type-wrapper">
             <label class="event__type  event__type-btn" for="event-type-toggle-1">
               <span class="visually-hidden">Choose event type</span>
-              <img class="event__type-icon" width="17" height="17" src="img/icons/${point.type}.png" alt="Event type icon">
+              <img class="event__type-icon" width="17" height="17" src="img/icons/${data.type}.png" alt="Event type icon">
             </label>
             <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -109,9 +138,9 @@ export default class EditPoint extends AbstractView {
 
           <div class="event__field-group  event__field-group--destination">
             <label class="event__label  event__type-output" for="event-destination-1">
-              ${capitalize(point.type)}
+              ${capitalize(data.type)}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${point.destination.name}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${data.destination.name}" list="destination-list-1">
             <datalist id="destination-list-1">
               <option value="${names[0]}"></option>
               <option value="${names[1]}"></option>
@@ -126,10 +155,10 @@ export default class EditPoint extends AbstractView {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate(point.date_from)}">
+            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDate(data.date_from)}">
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate(point.date_to)}">
+            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDate(data.date_to)}">
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -137,7 +166,7 @@ export default class EditPoint extends AbstractView {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${point.base_price}">
+            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${data.base_price}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -151,13 +180,13 @@ export default class EditPoint extends AbstractView {
             <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
             <div class="event__available-offers">
-              ${point.offers.length ? getOffers(point.offers) : ''}
+              ${data.offers.length ? getOffers(data.offers, data.type) : ''}
             </div>
           </section>
 
           <section class="event__section  event__section--destination">
             <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${point.destination.description}</p>
+            <p class="event__destination-description">${data.destination.description}</p>
           </section>
         </section>
       </form>
@@ -165,7 +194,38 @@ export default class EditPoint extends AbstractView {
   }
 
   getTemplate() {
-    return this.createEditPointTemplate(this._point);
+    return this.createEditPointTemplate(this._data);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._callback.formSubmit);
+  }
+
+  _setInnerHandlers() {
+    this.getElement()
+      .querySelector('.event__type-group')
+      .addEventListener('change', this._changeTypeHandler);
+    this.getElement()
+      .querySelector('.event__input--destination')
+      .addEventListener('change', this._changeDestinationHandler);
+  }
+
+  _changeTypeHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      type: evt.target.value,
+      offers: offers[evt.target.value],
+    });
+  }
+
+  _changeDestinationHandler(evt) {
+    evt.preventDefault();
+    this.updateData({
+      destination: {
+        name: evt.target.value,
+      },
+    });
   }
 
   _formSubmitHandler(evt) {
@@ -176,5 +236,14 @@ export default class EditPoint extends AbstractView {
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
     this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  static parsePointToData(point) {
+    return Object.assign({}, point);
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+    return data;
   }
 }
